@@ -1,0 +1,2 @@
+Création base de donnée
+Utilisation de faker pour générer des donnée avec des scripts

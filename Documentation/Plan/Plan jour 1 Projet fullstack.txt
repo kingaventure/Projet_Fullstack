@@ -1,4 +1,4 @@
 Crée le MCD XXX
 Découpage projet XXX
 Repo git XXX
-Crée la structure projet 
+Crée la structure projet XXX
