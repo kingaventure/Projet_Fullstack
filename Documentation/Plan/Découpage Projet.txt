@@ -1,0 +1,7 @@
+Faire apparaitre 15 acticles 
+Crée la pagination
+Crée la recherche pars catégorie
+Crée le moteur de recherche (peut être mettre l'autocomplete)
+faire le crud des user
+faire le crud des acticles
+Faire le système du panier
