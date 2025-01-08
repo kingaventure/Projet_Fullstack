@@ -13,7 +13,7 @@ for ($i = 0; $i < 100; $i++) {
     $name = $faker->word();
     $description = $faker->paragraph();
     $category = $faker->randomElement(['télevision', 'papetrie', 'Informatique', 'Mobilier', 'avion']);
-    $image = "https://cds.thalesgroup.com/sites/default/files/2023-12/csm_16920180628_fuego_thinkstock_489587e013.png";
+    $image = $faker->randomElement(["https://cds.thalesgroup.com/sites/default/files/2023-12/csm_16920180628_fuego_thinkstock_489587e013.png", "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg", 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YD04QOJ93VCzWj6J/macro-eye-iris_23-2151618644-AGB4DQ180oswOLj4.jpg', 'https://emotions-numeriques.com/wp-content/uploads/2018/10/fleur-2.jpg', 'https://st.depositphotos.com/1057668/4156/i/450/depositphotos_41568091-stock-photo-seljalandfoss-waterfall.jpg']); ;
     $prix = $faker->randomNumber();
     $stock = $faker->randomNumber();
 

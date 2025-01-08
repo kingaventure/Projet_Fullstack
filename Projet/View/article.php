@@ -6,9 +6,9 @@
             <div class="row">
         <?php endif; ?>
 
-        <div class="col-md-4">
+        <div class="col-md-4 mt-5">
             <div class="card" style="width: 100%; margin-bottom: 20px;">
-                <img src="https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg" class="card-img-top" alt="volcan">
+                <img src="<?php echo $article['Image']; ?>" class="card-img-top" alt="volcan">
                 <div class="card-body">
                     <h4 class="card-title"><?php echo $article['Name']; ?></h4>
                     <h6 class="card-title">Catégorie : <?php echo $article['Category']; ?></h6>
@@ -30,4 +30,26 @@
             </div>
         <?php endif; ?>
     <?php endforeach; ?>
+
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+            <?php if ($page > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo $page - 1; ?>">Précédent</a>
+                </li>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                </li>
+            <?php endfor; ?>
+
+            <?php if ($page < $totalPages): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo $page + 1; ?>">Suivant</a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
 </div>
