@@ -1,13 +1,16 @@
 <?php
+require "./Model/article.php";
 
-    require "./Model/article.php";
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 15; 
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$category = isset($_GET['category']) ? $_GET['category'] : '';
 
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $limit = 15;
-    $totalArticles = getTotalArticles($pdo);
-    $totalPages = ceil($totalArticles / $limit);
 
-    $articles = getArticlesByPage($pdo, $page, $limit);
+$articles = getArticlesByPage($pdo, $page, $limit, $search, $category);
 
-    require "./View/article.php";
+$totalArticles = getTotalArticles($pdo, $search, $category);
+$totalPages = ceil($totalArticles / $limit);
+
+require "./View/article.php";
 ?>
