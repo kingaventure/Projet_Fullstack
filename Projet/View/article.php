@@ -43,7 +43,7 @@
     <ul class="pagination justify-content-center mt-4">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
             <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
-                <a class="page-link" href="?page=<?php echo $i; ?>&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>"><?php echo $i; ?></a>
+                <a class="page-link" href="?component=article&page=<?php echo $i; ?>&component=article&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>"><?php echo $i; ?></a>
             </li>
         <?php endfor; ?>
     </ul>
