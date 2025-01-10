@@ -2,6 +2,7 @@
     session_start();
     require './includes/database.php';
     require './includes/function.php';
+    require './_partials/errors.php';
     $errors = [];
     if (isset($_GET['logout']) && $_GET['logout']) {
         session_destroy();
@@ -37,6 +38,7 @@
                 rel="stylesheet"
         >
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" href="../Documentation/logo.ico">
     <title>Projet de julien</title>
 </head>
 <body data-bs-theme="dark">

@@ -54,17 +54,17 @@
         }
     }
 
-    function verify_user (PDO $pdo, string $username)
-    {
-        try {
-            $state = $pdo->prepare("SELECT COUNT(*) AS user_number FROM user WHERE username = :username");
-            $state->bindParam(':username', $username, PDO::PARAM_STR);
-            $state->execute();
-            $res = $state->fetch();
-        } catch (Exception $e) {
-            return "Erreur de verification du username {$e->getMessage()}";
-        }
+    function verify_user(PDO $pdo, string $username)
+{
+    try {
+        $state = $pdo->prepare("SELECT COUNT(*) AS user_number FROM user WHERE username = :username");
+        $state->bindParam(':username', $username, PDO::PARAM_STR);
+        $state->execute();
+        return $state->fetch(); 
+    } catch (Exception $e) {
+        return "Erreur de verification du username {$e->getMessage()}";
     }
+}
 
     function user_create (PDO $pdo, string $username, string $password, string $email, bool $enabled)
     {

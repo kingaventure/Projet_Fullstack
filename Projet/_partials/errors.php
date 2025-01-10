@@ -1,8 +1,9 @@
-
-    <?php if (!empty($errors)): ?>
-        <?php foreach ($errors as $error): ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo $error; ?>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+<?php if (!empty($errors)): ?>
+    <div class="alert alert-danger">
+        <ul>
+            <?php foreach ($errors as $error): ?>
+                <li><?php echo $error; ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>

@@ -30,7 +30,9 @@
         <label class="form-check-label" for="enabled">Actif</label>
     </div>
     <div class="mb-3 d-flex justify-content-end">
-        <button type="submit"  class="btn <?php echo isset($id) ? "btn-success" : "btn-primary" ?>"
-                name="<?php echo isset($id) ? "edit_button" : "valid_button"; ?>"> <?php echo isset($id) ? "Modifier" : "Enregistrer"; ?></button>
+    <button type="submit" class="btn <?php echo isset($id) ? "btn-success" : "btn-primary"; ?>"
+        name="<?php echo isset($id) ? "edit_button" : "valid_button"; ?>">
+        <?php echo isset($id) ? "Modifier" : "Enregistrer"; ?>
+    </button>
     </div>
 </form>

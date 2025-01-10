@@ -1,17 +1,12 @@
 <?php
-/**
- * @var PDO $pdo
- */
-
     require "./Model/user.php";
 
-    if (isset($_POST['edit_button']))
-    {
+    if (isset($_POST['edit_button'])) {
         $username = !empty($_POST['username']) ? $_POST['username'] : null;
         $password = !empty($_POST['password']) ? $_POST['password'] : null;
         $confirmation = !empty($_POST['confirmation']) ? $_POST['confirmation'] : null;
         $email = !empty($_POST['email']) ? $_POST['email'] : null;
-        $enabled = !empty($_POST['enabled']) ? true : false;
+        $enabled = !empty($_POST['enabled']) ? 1 : 0;
         $id = $_GET['id'];
 
         if (!is_numeric($id)){
@@ -60,6 +55,10 @@
                 }
             }
         }
+        if (empty($errors)) {
+            header("Location: index.php?component=users");
+            exit;
+        }
     }
 
     if (isset($_POST['valid_button'])) {
@@ -100,18 +99,20 @@
                 }
                 else{
                     $res = user_create($pdo, $username, $password, $email, $enabled);
-                    if(!empty($res))
-                    {
+                    if(!empty($res)) {
                         $errors[] = $res;
                     }
+                    header("Location: index.php?component=users");
+                    exit;
                 }
+
+                
+                
 
             }
         } else {
             $errors[] = 'Tous les champs sont obligatoires';
         }
-
-
     }
 
 

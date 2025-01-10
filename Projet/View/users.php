@@ -1,7 +1,15 @@
+<div class="d-flex justify-content-between align-items-center">
+    <a href="index.php?component=items" class="p-3">
+        <h2>Liste des articles</h2>
+    </a>
+    <a href="index.php?component=categories" class="p-3">
+        <h2>Liste des catégories</h2>
+    </a>
+</div>     
 <h1 class="text-center">Liste des utilisateurs</h1>
 <div class="text-end me-5">
     <a href="index.php?component=user&action=create">
-        <i class="fa-solid fa-user-plus fa-2xl" style="color: black"></i>
+        <i class="fa-solid fa-user-plus fa-2xl" style="color: grey; font-size: 50px;"></i>
     </a>
 </div>
 <table class="table">
@@ -44,6 +52,7 @@
                                 "fa-user-lock text-danger"
                             ?>"
                             title="Vous ne pouvez pas désactiver le compte que vous utilisez"
+                            style="font-size: 20px;"
                     >
                     </i>
 
@@ -56,11 +65,11 @@
                             onclick="return confirm('Êtes-vous sur de vouloir supprimer');"
 
                     >
-                        <i class="fa-solid fa-trash text-danger"></i>
+                        <i class="fa-solid fa-trash text-danger" style="font-size: 20px;"></i>
                     </a>
                 <?php endif; ?>
                 <a href="index.php?component=user&action=edit&id=<?php echo $user['id']?>">
-                    <i class="fa-solid fa-user-pen"></i>
+                    <i class="fa-solid fa-user-pen" style="color: grey; font-size: 20px;"></i>
                 </a>
 
             </td>
