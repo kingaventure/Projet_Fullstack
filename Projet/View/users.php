@@ -1,9 +1,3 @@
-<?php
-/**
- * @var array   $users
- */
-?>
-
 <h1 class="text-center">Liste des utilisateurs</h1>
 <div class="text-end me-5">
     <a href="index.php?component=user&action=create">
@@ -28,7 +22,7 @@
             <td><?php echo$user['username']?></td>
             <td><?php echo$user['email']?></td>
             <td>
-                <?php if ($user['id'] !== $_SESSION['user_id']) :?>
+                <!-- <?php if ($user['id'] !== $_SESSION['id']) :?> -->
                 <a href="index.php?component=users&action=toggle-enabled&id=<?php echo $user['id']?>">
                     <i
                             class="fa-solid
@@ -56,7 +50,7 @@
                 <?php endif; ?>
             </td>
             <td>
-               <?php if ($user['id'] !== $_SESSION['user_id']) : ?>
+               <!-- <?php if ($user['id'] !== $_SESSION['user_id']) : ?> -->
                     <a
                             href="index.php?component=users&action=delete&id=<?php echo $user['id']?>"
                             onclick="return confirm('Êtes-vous sur de vouloir supprimer');"

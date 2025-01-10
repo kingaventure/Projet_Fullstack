@@ -8,6 +8,7 @@ for ($i = 0; $i < 100; $i++) {
     $username = $faker->userName();
     $email = $faker->email();
     $password = $faker->password();
+    $password = password_hash(`$password`, PASSWORD_DEFAULT, ['cost' => 10]);
     $disabled = $faker->numberBetween(0, 1);
 
     $name = $faker->word();
@@ -18,7 +19,7 @@ for ($i = 0; $i < 100; $i++) {
     $stock = $faker->randomNumber();
 
 
-    $query = $pdo->prepare("INSERT INTO user (Username, Password, Email, Disabled) VALUES (:Username, :Password, :Email, :Disabled)");
+    $query = $pdo->prepare("INSERT INTO user (username, password, email, enabled) VALUES (:Username, :Password, :Email, :Disabled)");
     $query->execute([
         'Username' => $username,
         'Email' => $email,
