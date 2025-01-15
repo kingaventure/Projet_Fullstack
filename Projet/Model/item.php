@@ -55,17 +55,37 @@
     }
 }
 
-    function item_create (PDO $pdo, string $name, string $description, string $category, string $price, string $stock)
+    function item_create (PDO $pdo, string $name, string $description, string $category, string $price, string $stock, string | null $image = null)
     {
         try {
-            $state = $pdo->prepare('INSERT INTO article (`Name`, `Description`, `Category`, `Prix`, `Stock`) VALUES (:Name, :Description, :Category, :Price, :Stock)');
+            $state = $pdo->prepare('INSERT INTO article (`Name`, `Description`, `Category`, `Prix`, `Stock`, `Image`) VALUES (:Name, :Description, :Category, :Price, :Stock, :Image)');
             $state->bindParam(':Name', $name);
             $state->bindParam(':Description', $description);
             $state->bindParam(':Category', $category);
             $state->bindParam(':Price', $price);
             $state->bindParam(':Stock', $stock);
+            $state->bindParam(':Image', $image);
             $state->execute();
         } catch (Exception $e) {
             return "Erreur à la création de l'article {$e->getMessage()}";
         }
     }
+
+    function resetImage(PDO $pdo, int $id)
+{
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $query="UPDATE article SET Image = NULL WHERE Id = :Id";
+    $prep = $pdo->prepare($query);
+    $prep->bindValue(':Id', $id, PDO::PARAM_INT);
+    try
+    {
+        $prep->execute();
+    }
+    catch (PDOException $e)
+    {
+        return " erreur : ".$e->getCode() .' :</b> '. $e->getMessage();
+    }
+    $prep->closeCursor();
+
+    return true;
+}

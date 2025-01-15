@@ -15,7 +15,7 @@
 
             <div class="col-md-4 mt-5">
                 <div class="card" style="width: 100%; margin-bottom: 20px;">
-                    <img src="<?php echo $article['Image']; ?>" class="card-img-top" alt="volcan">
+                    <img src="./uploads/<?php echo $article['Image']; ?>" class="card-img-top" alt="volcan">
                     <div class="card-body">
                         <h4 class="card-title"><?php echo $article['Name']; ?></h4>
                         <h6 class="card-title">Catégorie : <?php echo $article['Category']; ?></h6>

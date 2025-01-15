@@ -1,6 +1,16 @@
 <?php require './_partials/errors.php'; ?>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="">Image</label>
+        <input type="file" name="image" id="image" class="form-control"/>
+    </div>
+    <div class="mb-3 d-flex align-items-end" id="item-image">
+        <?php  if (!empty($item) && !empty($item['Image'])) : ?>
+        <img class="img-thumbnail" src="./uploads/<?php echo  $item['Image']; ?>" width="100"/>
+        <a href="#"><i class="fa fa-times text-danger ms-3" id="remove-image-btn" data-id="<?php echo $item["Id"]; ?>"></i></a>
+        <?php  endif; ?>
+    </div>
     <div class="mb-3">
         <label for="Name" class="form-label">Nom</label>
         <input type="text" name="Name" id="Name" class="form-control"
@@ -33,3 +43,10 @@
         </button>
     </div>
 </form>
+<script type="module">
+    import {handleRemoveImageClick} from "./asset/js/Components/item.js";
+
+    document.addEventListener('DOMContentLoaded', () => {
+        handleRemoveImageClick()
+    })
+</script> 
