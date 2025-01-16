@@ -1,3 +1,4 @@
+
 <?php
 require './Model/article.php';
 
@@ -12,3 +13,4 @@ $totalPages = ceil($totalArticles / $limit);
 
 require "./View/article.php";
 ?>
+<script src="./asset/js/Services/cart.js"></script>

@@ -108,17 +108,6 @@ function getArticleCategoryNames(PDO $pdo, int $category_id) {
     }
 }
 
-function getAllCategories(PDO $pdo)
-{
-    try {
-        $state = $pdo->prepare("SELECT * FROM category");
-        $state->execute();
-        return $state->fetchAll();
-    } catch (Exception $e) {
-        return "Erreur de requete : {$e->getMessage()}";
-    }
-}
-
 function getIdCategory_id(PDO $pdo, string $category_name)
 {
     try {

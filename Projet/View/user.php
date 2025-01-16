@@ -1,3 +1,5 @@
+<a class="btn btn-secondary" href="http://localhost/Projet_fullstack/Projet/index.php?component=users" role="button">Retour</a>
+
 <form method="post">
     <div class="mb-3">
         <label for="username" class="form-label">Identifiant</label>

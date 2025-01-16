@@ -1,3 +1,5 @@
+<a class="btn btn-secondary" href="http://localhost/Projet_fullstack/Projet/index.php?component=categories" role="button">Retour</a>
+
 <form method="post">
     <div class="mb-3">
         <label for="category_name" class="form-label">Name</label>

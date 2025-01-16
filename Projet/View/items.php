@@ -35,7 +35,7 @@
             <td><?php echo $item['Name']?></td>
             <td><?php echo $item['Description']?></td>
             <td><?php echo $item['category_id']?></td>
-            <td><img src="./uploads/<?php echo $item['Image']?>" width="200"></td>
+            <td><img src="./uploads/<?php echo $item['Image']?>" width="200" height="100"></td>
             <td><?php echo $item['Prix']?></td>
             <td><?php echo $item['Stock']?></td>
             <td>

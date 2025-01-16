@@ -56,7 +56,10 @@
             $componentName = ($_GET['component']);
             if (file_exists("Controller/$componentName.php")){
                 require "./Controller/$componentName.php";
-            }  
+            } 
+            foreach ($errors as $error): 
+               ?> <li><?php echo htmlspecialchars($error); ?></li>
+            <?php endforeach; 
         }
     ?>
 

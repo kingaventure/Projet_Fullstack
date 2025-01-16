@@ -5,7 +5,7 @@
                 <h3>Résultats de recherche pour "<?php echo htmlspecialchars($search); ?>"</h3>
             </div>
         <?php endif; ?>
-        
+
         <?php 
         $counter = 0;
         
@@ -25,11 +25,11 @@
                         <h6 class="card-title">Catégorie : <?php echo $article['category_id']; ?></h6>
                         <h6 class="card-title">Prix : <?php echo $article['Prix']; ?>$</h6>
                         <h6 class="card-title">Nombre restant : <?php echo $article['Stock']; ?></h6>
-                        <p class="card-text"><?php echo $article['Description']; ?></p>
+                        <p class="card-text"><?php echo substr($article['Description'],0 , 50); ?> ...</p>
                         <?php if ($article['Stock'] > 0): ?>
-                            <a href="#" class="btn btn-primary">Acheter</a>
+                            <button class="buyBtn btn btn-primary" data-article-name="<?php echo $article['Name']; ?>" data-article-price="<?php echo $article['Prix']; ?>" data-article-stock="<?php echo $article['Stock']; ?>">Acheter</button>
                         <?php else: ?>
-                            <button class="btn btn-secondary" disabled>Rupture</button>
+                            <button class="buyBtn btn btn-secondary" disabled>Rupture</button>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -43,6 +43,18 @@
         <?php endforeach; ?>
     </div>
 
+    <style>
+        .card{
+            height: 600px;
+        }
+        .card img{
+            height: 60%;
+            place-items: center;
+            object-fit: cover;
+        }
+
+    </style>
+
     <nav>
     <ul class="pagination justify-content-center mt-4">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
@@ -51,5 +63,42 @@
             </li>
         <?php endfor; ?>
     </ul>
-</nav>
+    </nav>
 </div>
+
+<div class="toast-container position-absolute top-0 end-0 p-3">
+    <div
+        class="toast align-items-center text-white bg-success border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        id="toast-message"
+    >
+        <div class="d-flex">
+            <div class="toast-body">
+            Ajouté au panier avec succès
+        </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="modal-close-btn">Fermer</button>
+                <button type="button" class="btn btn-primary" id="modal-valid-btn">Valider et réinitialiser</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./asset/js/Services/cart.js"></script>

@@ -9,7 +9,7 @@
 <h1 class="text-center">Liste des catégories</h1>
 <div class="text-end me-5">
     <a href="index.php?component=category&action=create">
-        <i class="fa-solid fa-user-plus fa-2xl" style="color: grey; font-size: 50px;"></i>
+    <i class="fa-solid fa-plus" style="color: grey; font-size: 50px;"></i>
     </a>
 </div>
 <table class="table">
@@ -37,7 +37,7 @@
                     </a>
                 <?php endif; ?>
                 <a href="index.php?component=category&action=edit&Id=<?php echo $category['Id']?>">
-                    <i class="fa-solid fa-user-pen" style="color: grey; font-size: 20px;"></i>
+                <i class="fa-solid fa-pen" style="color: grey; font-size: 20px;"></i>
                 </a>
 
             </td>

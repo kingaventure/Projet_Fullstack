@@ -1,5 +1,6 @@
 <?php require './_partials/errors.php'; ?>
 
+<a class="btn btn-secondary" href="http://localhost/Projet_fullstack/Projet/index.php?component=items" role="button">Retour</a>
 <form method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="image" class="form-label">Image</label>
@@ -26,7 +27,10 @@
         <option value="<?php echo isset($item['category_id']) ? $item['category_id'] : ""; ?>" selected>
             <?php echo isset($item['category_id']) ? $item['category_id'] : "Sélectionnez une catégorie"; ?>
         </option>
-        <?php foreach($categories as $category) :?>
+        <?php foreach($categories as $category) :
+            if ($category['category_name'] === $item['category_id']) {
+                continue;
+            }?>
         <option value="<?php echo $category['category_name']; ?>">
             <?php echo $category['category_name']; ?>
         </option>
