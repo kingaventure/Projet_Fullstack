@@ -26,23 +26,6 @@
         }
 
     }
-
-    function updateItem(PDO $pdo, int $id, string $name, string $description, string $category, string $price, string $stock)
-    {
-        try {
-            $state = $pdo->prepare("UPDATE `article` SET Name = :Name, Description = :Description, Category = :Category, Prix = :Price, Stock = :Stock WHERE Id = :id");
-            $state->bindParam(':id', $id, PDO::PARAM_INT);
-            $state->bindParam(':Name', $name);
-            $state->bindParam(':Description', $description);
-            $state->bindParam(':Category', $category);
-            $state->bindParam(':Price', $price);
-            $state->bindParam(':Stock', $stock);
-            $state->execute();
-        } catch (Exception $e) {
-            return "Erreur de requete : {$e->getMessage()}";
-        }
-    }
-
     function verify_item(PDO $pdo, string $name)
 {
     try {
@@ -55,13 +38,13 @@
     }
 }
 
-    function item_create (PDO $pdo, string $name, string $description, string $category, string $price, string $stock, string | null $image = null)
+    function item_create (PDO $pdo, string $name, string $description, string $category_id, string $price, string $stock, string | null $image = null)
     {
         try {
-            $state = $pdo->prepare('INSERT INTO article (`Name`, `Description`, `Category`, `Prix`, `Stock`, `Image`) VALUES (:Name, :Description, :Category, :Price, :Stock, :Image)');
+            $state = $pdo->prepare('INSERT INTO article (`Name`, `Description`, `category_id`, `Prix`, `Stock`, `Image`) VALUES (:Name, :Description, :category_id, :Price, :Stock, :Image)');
             $state->bindParam(':Name', $name);
             $state->bindParam(':Description', $description);
-            $state->bindParam(':Category', $category);
+            $state->bindParam(':category_id', $category_id);
             $state->bindParam(':Price', $price);
             $state->bindParam(':Stock', $stock);
             $state->bindParam(':Image', $image);
@@ -88,4 +71,62 @@
     $prep->closeCursor();
 
     return true;
+}
+function updateItem(PDO $pdo, int $id, string $name, string $description, string $category_id, string $price, string $stock, string | null $image = null)
+{
+    try {
+        $query = "UPDATE `article` SET Name = :Name, Description = :Description, category_id = :category_id, Prix = :Price, Stock = :Stock";
+        if ($image !== null) {
+            $query .= ", Image = :Image";
+        }
+        $query .= " WHERE Id = :id";
+
+        $state = $pdo->prepare($query);
+        $state->bindParam(':id', $id, PDO::PARAM_INT);
+        $state->bindParam(':Name', $name);
+        $state->bindParam(':Description', $description);
+        $state->bindParam(':category_id', $category_id);
+        $state->bindParam(':Price', $price);
+        $state->bindParam(':Stock', $stock);
+        if ($image !== null) {
+            $state->bindParam(':Image', $image);
+        }
+        $state->execute();
+    } catch (Exception $e) {
+        return "Erreur de requete : {$e->getMessage()}";
+    }
+}
+function getArticleCategoryNames(PDO $pdo, int $category_id) {
+    try {
+        $statement = $pdo->prepare("SELECT category_name FROM category WHERE Id = :category_id");
+        $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}
+
+function getAllCategories(PDO $pdo)
+{
+    try {
+        $state = $pdo->prepare("SELECT * FROM category");
+        $state->execute();
+        return $state->fetchAll();
+    } catch (Exception $e) {
+        return "Erreur de requete : {$e->getMessage()}";
+    }
+}
+
+function getIdCategory_id(PDO $pdo, string $category_name)
+{
+    try {
+        $state = $pdo->prepare("SELECT Id FROM category WHERE category_name = :category_name");
+        $state->bindParam(':category_name', $category_name);
+        $state->execute();
+        return $state->fetch();
+    } catch (Exception $e) {
+        return "Erreur de requete : {$e->getMessage()}";
+    }
 }

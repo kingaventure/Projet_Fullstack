@@ -1,72 +1,80 @@
 <?php
 require "./Model/item.php";
 
+if (!defined('UPLOAD_DIRECTORY')) {
+    define('UPLOAD_DIRECTORY', '/uploads/');
+}
+
 $errors = [];
 
 function validateNumeric($value) {
     return is_numeric($value);
 }
 
+if (!function_exists('cleanString')) {
+    function cleanString($string) {
+        return htmlspecialchars(trim($string), ENT_QUOTES, 'UTF-8');
+    }
+}
+
 if (isset($_POST['edit_button'])) {
     $name = !empty($_POST['Name']) ? $_POST['Name'] : null;
     $description = !empty($_POST['Description']) ? $_POST['Description'] : null;
-    $category = !empty($_POST['Category']) ? $_POST['Category'] : null;
+    $category_id = !empty($_POST['category_id']) ? $_POST['category_id'] : null;
     $price = !empty($_POST['Prix']) ? $_POST['Prix'] : null;
     $stock = !empty($_POST['Stock']) ? $_POST['Stock'] : null;
     $id = $_GET['id'];
+    $fileName = null;
 
-    if (!is_numeric($id)) {
-        $errors[] = "Id au mauvais format";
+    if (isset($_FILES["image"]["name"]) && !empty($_FILES["image"]["name"])) {
+        $tmpName = $_FILES["image"]['tmp_name'];
+        $fileName = $_FILES["image"]["name"];
+        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+        $uniqFilename = uniqid();
+        $finalName = $uniqFilename . "." . $ext;
+
+        move_uploaded_file($tmpName, $_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIRECTORY . $finalName);
+    } else {
+        $finalName = null;
     }
 
-    if (!empty($name) && !empty($description) && !empty($category) && !empty($price) && !empty($stock)) {
+    if (empty($errors)) {
+        $name = cleanString($name);
+        $description = cleanString($description);
+        $category_id = cleanString($category_id);
+        $price = cleanString($price);
+        $stock = cleanString($stock);
 
-        $fileName = null;
-
-        if (!empty($_FILES["Image"]["name"])) {
-            $tmpName = $_FILES["Image"]['tmp_name'];
-            $fileName = $_FILES["Image"]["name"];
-            $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-            $uniqFilename = uniqid();
-            $finalName = $uniqFilename . "." . $ext;
-    
-            move_uploaded_file($tmpName, $_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIRECTORY . $finalName);
-            var_dump($_FILES);
-        } 
+        $res = verifyName($pdo, $name, $id);
+        if ($res['item_number'] != 0) {
+            $errors[] = "Le nom est déjà utilisé";
+        }
         if (empty($errors)) {
-            $name = cleanString($name);
-            $description = cleanString($description);
-            $category = cleanString($category);
-            $price = cleanString($price);
-            $stock = cleanString($stock);
-
-            $res = verifyName($pdo, $name, $id);
-            if ($res['item_number'] != 0) {
-                $errors[] = "Le nom est déjà utilisé";
+            $category_id = getIdCategory_id($pdo, $category_id);
+            if (is_array($category_id)) {
+                $category_id = $category_id['Id'];
+            } else {
+                $errors[] = $category_id;
             }
-            if (empty($errors)) {
-                $res = updateItem($pdo, $id, $name, $description, $category, $price, $stock);
-                if (!empty($res)) {
-                    $errors[] = $res;
-                } else {
-                    header("Location: index.php?component=items");
-                    exit();
-                }
+            $res = updateItem($pdo, $id, $name, $description, $category_id, $price, $stock, $finalName);
+            if (!empty($res)) {
+                $errors[] = $res;
+            } else {
+                header("Location: index.php?component=items");
+                exit();
             }
         }
-    } else {
-        $errors[] = "Tous les champs sont obligatoires";
     }
 }
 
 if (isset($_POST['valid_button'])) {
     $name = !empty($_POST['Name']) ? $_POST['Name'] : null;
     $description = !empty($_POST['Description']) ? $_POST['Description'] : null;
-    $category = !empty($_POST['Category']) ? $_POST['Category'] : null;
+    $category_id = !empty($_POST['category_id']) ? $_POST['category_id'] : null;
     $price = !empty($_POST['Prix']) ? $_POST['Prix'] : null;
     $stock = !empty($_POST['Stock']) ? $_POST['Stock'] : null;
 
-    if (!empty($name) && !empty($description) && !empty($category) && !empty($price) && !empty($stock)) {
+    if (!empty($name) && !empty($description) && !empty($category_id) && !empty($price) && !empty($stock)) {
         if (!validateNumeric($price)) {
             $errors[] = "Le prix doit être un nombre";
         }
@@ -76,7 +84,7 @@ if (isset($_POST['valid_button'])) {
 
         $fileName = null;
 
-        if (!empty($_FILES["image"]["name"])) {
+        if (isset($_FILES["image"]["name"]) && !empty($_FILES["image"]["name"])) {
             $tmpName = $_FILES["image"]['tmp_name'];
             $fileName = $_FILES["image"]["name"];
             $ext = pathinfo($fileName, PATHINFO_EXTENSION);
@@ -89,7 +97,7 @@ if (isset($_POST['valid_button'])) {
         if (empty($errors)) {
             $name = cleanString($name);
             $description = cleanString($description);
-            $category = cleanString($category);
+            $category_id = cleanString($category_id);
             $price = cleanString($price);
             $stock = cleanString($stock);
 
@@ -97,7 +105,7 @@ if (isset($_POST['valid_button'])) {
             if ($res['item_number'] != 0) {
                 $errors[] = 'Le nom est déjà utilisé';
             } else {
-                $res = item_create($pdo, $name, $description, $category, $price, $stock, $finalName);
+                $res = item_create($pdo, $name, $description, $category_id, $price, $stock, $finalName);
                 if (!empty($res)) {
                     $errors[] = $res;
                 } else {
@@ -134,8 +142,8 @@ if (isset($_GET['id'])) {
         echo json_encode(['error' => "Impossible de sélectionner l'article"]);
         exit();
     }
-
-    if (file_exists($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIRECTORY . $item['image'])) {
+    
+    if (isset($item['image']) && file_exists($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIRECTORY . $item['image'])) {
         try {
             unlink($_SERVER["DOCUMENT_ROOT"] . UPLOAD_DIRECTORY . $item['image']);
         } catch (Exception $e) {
@@ -144,7 +152,7 @@ if (isset($_GET['id'])) {
             exit();
         }
         $reset = resetImage($pdo, $id);
-
+    
         if (is_string($reset)) {
             header("Content-Type: application/json");
             echo json_encode(['error' => $reset]);
@@ -155,6 +163,9 @@ if (isset($_GET['id'])) {
             exit();
         }
     }
+    $categorys = getArticleCategoryNames($pdo, $item['category_id']);
+    $item['category_id'] = $categorys['category_name'];
+    $categories = getAllCategories($pdo);
 }
 
 require "./View/item.php";

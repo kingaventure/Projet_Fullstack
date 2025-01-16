@@ -8,17 +8,21 @@
         
         <?php 
         $counter = 0;
+        
         foreach ($articles as $article): 
             if ($counter % 3 === 0): ?>
                 <div class="row">
             <?php endif; ?>
 
+            <?php $category = getArticleCategoryNames($pdo, $article['category_id']);
+            $article['category_id'] = $category['category_name']; ?>
+            
             <div class="col-md-4 mt-5">
                 <div class="card" style="width: 100%; margin-bottom: 20px;">
                     <img src="./uploads/<?php echo $article['Image']; ?>" class="card-img-top" alt="volcan">
                     <div class="card-body">
                         <h4 class="card-title"><?php echo $article['Name']; ?></h4>
-                        <h6 class="card-title">Catégorie : <?php echo $article['Category']; ?></h6>
+                        <h6 class="card-title">Catégorie : <?php echo $article['category_id']; ?></h6>
                         <h6 class="card-title">Prix : <?php echo $article['Prix']; ?>$</h6>
                         <h6 class="card-title">Nombre restant : <?php echo $article['Stock']; ?></h6>
                         <p class="card-text"><?php echo $article['Description']; ?></p>
@@ -43,7 +47,7 @@
     <ul class="pagination justify-content-center mt-4">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
             <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
-                <a class="page-link" href="?component=article&page=<?php echo $i; ?>&component=article&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>"><?php echo $i; ?></a>
+                <a class="page-link" href="?component=article&page=<?php echo $i; ?>&component=article&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category_id); ?>"><?php echo $i; ?></a>
             </li>
         <?php endfor; ?>
     </ul>

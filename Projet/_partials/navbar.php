@@ -1,3 +1,16 @@
+<?php function getAllCategories(PDO $pdo)
+{
+    try {
+        $state = $pdo->prepare("SELECT * FROM category");
+        $state->execute();
+        return $state->fetchAll();
+    } catch (Exception $e) {
+        return "Erreur de requete : {$e->getMessage()}";
+    }
+} 
+$categories = getAllCategories($pdo);
+?>
+
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="http://localhost/Projet_fullstack/Projet/index.php?component=article">Le Site de Juju</a>
@@ -7,15 +20,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Catégorie
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=television&component=article">Télévision</a></li>
-                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=papeterie&component=article">Papeterie</a></li>
-                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=informatique&component=article">Informatique</a></li>
-                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=mobiier&component=article">Mobilier</a></li>
-                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=avion&component=article">Avion</a></li>
+                        <?php foreach ($categories as $category): ?>
+                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=<?php echo $category['Id']?>&component=article"><?php echo $category['category_name']?></a></li>
+                        <?php endforeach ?>
                     </ul>
                 </li>
 

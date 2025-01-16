@@ -2,14 +2,13 @@
 
 <form method="post" enctype="multipart/form-data">
     <div class="mb-3">
-        <label for="">Image</label>
+        <label for="image" class="form-label">Image</label>
         <input type="file" name="image" id="image" class="form-control"/>
     </div>
     <div class="mb-3 d-flex align-items-end" id="item-image">
-        <?php  if (!empty($item) && !empty($item['Image'])) : ?>
-        <img class="img-thumbnail" src="./uploads/<?php echo  $item['Image']; ?>" width="100"/>
-        <a href="#"><i class="fa fa-times text-danger ms-3" id="remove-image-btn" data-id="<?php echo $item["Id"]; ?>"></i></a>
-        <?php  endif; ?>
+        <?php if (!empty($item) && !empty($item['Image'])) : ?>
+            <img class="img-thumbnail" src="./uploads/<?php echo $item['Image']; ?>" width="100"/>
+        <?php endif; ?>
     </div>
     <div class="mb-3">
         <label for="Name" class="form-label">Nom</label>
@@ -22,10 +21,18 @@
                value="<?php echo isset($item['Description']) ? $item['Description'] : ""; ?>" required>
     </div>
     <div class="mb-3">
-        <label for="Category" class="form-label">Catégorie</label>
-        <input type="text" name="Category" id="Category" class="form-control"
-               value="<?php echo isset($item['Category']) ? $item['Category'] : ""; ?>" required>
-    </div>
+    <label for="category_id" class="form-label">Catégorie</label>
+    <select class="form-select" aria-label="Default select example" name="category_id" id="category_id" required>
+        <option value="<?php echo isset($item['category_id']) ? $item['category_id'] : ""; ?>" selected>
+            <?php echo isset($item['category_id']) ? $item['category_id'] : "Sélectionnez une catégorie"; ?>
+        </option>
+        <?php foreach($categories as $category) :?>
+        <option value="<?php echo $category['category_name']; ?>">
+            <?php echo $category['category_name']; ?>
+        </option>
+        <?php endforeach; ?>
+    </select>
+</div>
     <div class="mb-3">
         <label for="Stock" class="form-label">Stock</label>
         <input type="number" name="Stock" id="Stock" class="form-control"
@@ -49,4 +56,4 @@
     document.addEventListener('DOMContentLoaded', () => {
         handleRemoveImageClick()
     })
-</script> 
+</script>

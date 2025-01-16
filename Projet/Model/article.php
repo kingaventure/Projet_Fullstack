@@ -1,11 +1,13 @@
 <?php
-function getArticlesByPage(PDO $pdo, $page, $limit, $search = '', $category = '')
+function getArticlesByPage(PDO $pdo, $page, $limit, $search = '', $category_id = null)
 {
     $offset = ($page - 1) * $limit;
-    $query = 'SELECT * FROM article WHERE Name LIKE :search';
+    $query = 'SELECT article.*, category.category_name FROM article 
+              JOIN category ON article.category_id = category.Id 
+              WHERE article.Name LIKE :search';
     
-    if (!empty($category)) {
-        $query .= ' AND Category LIKE :category';
+    if (!empty($category_id)) {
+        $query .= ' AND article.category_id = :category_id';
     }
 
     $query .= ' LIMIT :limit OFFSET :offset';
@@ -14,9 +16,8 @@ function getArticlesByPage(PDO $pdo, $page, $limit, $search = '', $category = ''
     $searchTerm = '%' . $search . '%';
     $statement->bindValue(':search', $searchTerm, PDO::PARAM_STR);
     
-    if (!empty($category)) {
-        $categoryTerm = '%' . $category . '%';
-        $statement->bindValue(':category', $categoryTerm, PDO::PARAM_STR);
+    if (!empty($category_id)) {
+        $statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
     }
 
     $statement->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -30,29 +31,34 @@ function getArticlesByPage(PDO $pdo, $page, $limit, $search = '', $category = ''
     }
 }
 
-
-
-function getTotalArticles(PDO $pdo, $search = '', $category = '')
+function getTotalArticles(PDO $pdo, $search = '', $category_id = null)
 {
     $query = 'SELECT COUNT(*) AS total FROM article WHERE Name LIKE :search';
     
-    if (!empty($category)) {
-        $query .= ' AND Category LIKE :category';
+    if (!empty($category_id)) {
+        $query .= ' AND category_id = :category_id';
     }
 
     $statement = $pdo->prepare($query);
     $searchTerm = '%' . $search . '%';
     $statement->bindValue(':search', $searchTerm, PDO::PARAM_STR);
 
-    if (!empty($category)) {
-        $categoryTerm = '%' . $category . '%';
-        $statement->bindValue(':category', $categoryTerm, PDO::PARAM_STR);
+    if (!empty($category_id)) {
+        $statement->bindValue(':category_id', $category_id, PDO::PARAM_INT);
     }
 
     $statement->execute();
     $result = $statement->fetch();
     return $result['total'];
 }
-
-
-?>
+function getArticleCategoryNames(PDO $pdo, int $category_id) {
+    try {
+        $statement = $pdo->prepare("SELECT category_name FROM category WHERE Id = :category_id");
+        $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}

@@ -30,6 +30,11 @@ require "./Model/items.php";
     $search = isset($_POST['search']) ? $_POST['search'] : null;
     $sortby = isset($_GET['sortby']) ? $_GET['sortby'] : null;
     $items = getAll($pdo, $search, $sortby);
+    foreach($items as $item){
+        $category = getArticleCategoryNames($pdo, $item['category_id']);
+        $item['category_id'] = $category['category_name'];
+    }
+    
 
     if (!is_array($items))
     {

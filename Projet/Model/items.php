@@ -5,7 +5,6 @@
         if (null !== $search) {
             $query .= ' WHERE Id LIKE :search OR Name LIKE :search';
         }
-
         if (null !== $sortby) {
             $query .= " ORDER BY $sortby";
         }
@@ -36,5 +35,17 @@
         }
         catch (PDOException $e) {
             return $e ->getMessage();
+        }
+    }
+
+    function getArticleCategoryNames(PDO $pdo, int $category_id) {
+        try {
+            $statement = $pdo->prepare("SELECT category_name FROM category WHERE Id = :category_id");
+            $statement->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            $statement->execute();
+            return $statement->fetch(PDO::FETCH_ASSOC);
+        }
+        catch (PDOException $e) {
+            return $e->getMessage();
         }
     }
