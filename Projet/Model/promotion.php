@@ -43,3 +43,14 @@
             return "Erreur à la création de la promotion {$e->getMessage()}";
         }
     }
+
+    function getAllItems(PDO $pdo)
+    {
+        try {
+            $state = $pdo->prepare("SELECT * FROM article");
+            $state->execute();
+            return $state->fetchAll();
+        } catch (Exception $e) {
+            return "Erreur de requete : {$e->getMessage()}";
+        }
+    }

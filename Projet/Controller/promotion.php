@@ -78,5 +78,6 @@
         }
     }
 
+    $articles = getAllItems($pdo);
 
     require "./View/promotion.php";

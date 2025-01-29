@@ -2,8 +2,8 @@
     <a href="index.php?component=items" class="p-3">
         <h2>Liste des articles</h2>
     </a>
-    <a href="index.php?component=categories" class="p-3">
-        <h2>Liste des catégories</h2>
+    <a href="index.php?component=promotions" class="p-3">
+        <h2>Liste des promotions</h2>
     </a>
 </div>     
 <h1 class="text-center">Liste des utilisateurs</h1>

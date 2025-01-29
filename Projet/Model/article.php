@@ -62,3 +62,14 @@ function getArticleCategoryNames(PDO $pdo, int $category_id) {
         return $e->getMessage();
     }
 }
+
+function getAllPromotions(PDO $pdo) {
+    try {
+        $statement = $pdo->prepare("SELECT * FROM promotion");
+        $statement->execute();
+        return $statement->fetchAll();
+    }
+    catch (PDOException $e) {
+        return $e->getMessage();
+    }
+}

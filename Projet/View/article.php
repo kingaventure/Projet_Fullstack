@@ -7,55 +7,81 @@
         <?php endif; ?>
 
         <?php 
-        $counter = 0;
-        
-        foreach ($articles as $article): 
-            if ($counter % 3 === 0): ?>
-                <div class="row">
-            <?php endif; ?>
+$counter = 0;
+$promotions = getAllPromotions($pdo);
+$currentDate = new DateTime();
 
-            <?php $category = getArticleCategoryNames($pdo, $article['category_id']);
-            $article['category_id'] = $category['category_name']; ?>
-            
-            <div class="col-md-4 mt-5">
-                <div class="card" style="width: 100%; margin-bottom: 20px;">
-                    <img src="./uploads/<?php echo $article['Image']; ?>" class="card-img-top" alt="volcan">
-                    <div class="card-body">
-                        <h4 class="card-title"><?php echo $article['Name']; ?></h4>
-                        <h6 class="card-title">Catégorie : <?php echo $article['category_id']; ?></h6>
-                        <h6 class="card-title">Prix : <?php echo $article['Prix']; ?>$</h6>
-                        <h6 class="card-title">Nombre restant : <?php echo $article['Stock']; ?></h6>
-                        <p class="card-text"><?php echo substr($article['Description'],0 , 50); ?> ...</p>
-                        <?php if ($article['Stock'] > 0): ?>
-                            <button class="buyBtn btn btn-primary" data-article-name="<?php echo $article['Name']; ?>" data-article-price="<?php echo $article['Prix']; ?>" data-article-stock="<?php echo $article['Stock']; ?>">Acheter</button>
-                        <?php else: ?>
-                            <button class="buyBtn btn btn-secondary" disabled>Rupture</button>
-                        <?php endif; ?>
-                    </div>
-                </div>
+foreach ($articles as $article): 
+    if ($counter % 3 === 0): ?>
+        <div class="row">
+    <?php endif; ?>
+
+    <?php 
+    $category = getArticleCategoryNames($pdo, $article['category_id']);
+    $article['category_id'] = $category['category_name'];
+    
+    $articlePromotion = array_filter($promotions, function($promo) use ($article) {
+        return $promo['article_id'] == $article['Id'];
+    });
+    $articlePromotion = reset($articlePromotion);
+    $hasPromotion = $articlePromotion && isset($articlePromotion['reduction']) && $articlePromotion['reduction'] > 0;
+    $promotionEndDate = $hasPromotion ? new DateTime($articlePromotion['end']) : null;
+    $isPromotionValid = $hasPromotion && $promotionEndDate > $currentDate;
+
+    if ($isPromotionValid) {
+        $originalPrice = $article['Prix'];
+        $discount = $articlePromotion['reduction'] / 100;
+        $newPrice = $originalPrice - ($originalPrice * $discount);
+    } else {
+        $originalPrice = $article['Prix'];
+        $newPrice = $article['Prix'];
+        $articlePromotion['reduction'] = 0;
+    }
+    ?>
+    
+    <div class="col-md-4 mt-5">
+        <div class="card" style="width: 100%; margin-bottom: 20px;">
+            <img src="./uploads/<?php echo $article['Image']; ?>" class="card-img-top" alt="volcan">
+            <div class="card-body">
+                <h4 class="card-title"><?php echo $article['Name']; ?></h4>
+                <h6 class="card-title">Catégorie : <?php echo $article['category_id']; ?></h6>
+                <?php if ($isPromotionValid): ?>
+                    <h6 class="card-title">Prix : <span style="text-decoration: line-through;"><?php echo $originalPrice; ?>$</span> <?php echo $newPrice; ?>$ (-<?php echo $articlePromotion['reduction']; ?>%)</h6>
+                    <h6 class="card-title">Fin de la promotion : <?php echo $promotionEndDate->format('d/m/Y H:i'); ?></h6>
+                <?php else: ?>
+                    <h6 class="card-title">Prix : <?php echo $article['Prix']; ?>$</h6>
+                <?php endif; ?>
+                <h6 class="card-title">Nombre restant : <?php echo $article['Stock']; ?></h6>
+                <p class="card-text"><?php echo substr($article['Description'], 0, 50); ?> ...</p>
+                <?php if ($article['Stock'] > 0): ?>
+                    <button class="buyBtn btn btn-primary" data-article-name="<?php echo $article['Name']; ?>" data-article-price="<?php echo $newPrice; ?>" data-article-stock="<?php echo $article['Stock']; ?>" data-article-original-price="<?php echo $originalPrice; ?>" data-article-discount="<?php echo $articlePromotion['reduction']; ?>">Acheter</button>
+                <?php else: ?>
+                    <button class="buyBtn btn btn-secondary" disabled>Rupture</button>
+                <?php endif; ?>
             </div>
-
-            <?php 
-            $counter++; 
-            if ($counter % 3 === 0 || $counter === count($articles)): ?>
-                </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
+        </div>
     </div>
 
-    <style>
-        .card{
-            height: 600px;
-        }
-        .card img{
-            height: 60%;
-            place-items: center;
-            object-fit: cover;
-        }
+    <?php 
+    $counter++; 
+    if ($counter % 3 === 0 || $counter === count($articles)): ?>
+        </div>
+    <?php endif; ?>
+<?php endforeach; ?>
+</div>
 
-    </style>
+<style>
+    .card {
+        height: 600px;
+    }
+    .card img {
+        height: 60%;
+        place-items: center;
+        object-fit: cover;
+    }
+</style>
 
-    <nav>
+<nav>
     <ul class="pagination justify-content-center mt-4">
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
             <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
@@ -63,7 +89,7 @@
             </li>
         <?php endfor; ?>
     </ul>
-    </nav>
+</nav>
 </div>
 
 <div class="toast-container position-absolute top-0 end-0 p-3">
@@ -76,8 +102,8 @@
     >
         <div class="d-flex">
             <div class="toast-body">
-            Ajouté au panier avec succès
-        </div>
+                Ajouté au panier avec succès
+            </div>
             <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>

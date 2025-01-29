@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-between align-items-center">
-    <a href="index.php?component=users" class="p-3">
-        <h2>Liste des utilisateurs</h2>
+    <a href="index.php?component=promotions" class="p-3">
+        <h2>Liste des promotions</h2>
     </a>
     <a href="index.php?component=items" class="p-3">
         <h2>Liste des articles</h2>
