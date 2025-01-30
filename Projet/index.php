@@ -32,6 +32,19 @@
         }
          exit();
     }
+
+    if (
+        !empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+        strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+    ) {
+        if (isset($_GET['component'])) {
+            $componentName = cleanString($_GET['component']);
+            if (file_exists("Controller/$componentName.php")) {
+                require "Controller/$componentName.php";
+            }
+        }
+        exit();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +76,10 @@
         }
     ?>
 
-<script src="./includes/bootstrap/bootstrap.min.js"></script>
+<script src="./includes/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="./asset/js/Services/cart.js"></script>
+<script src="./asset/js/Services/navigation.js"></script>
+
+
 </body>
 </html>

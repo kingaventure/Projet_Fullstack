@@ -1,4 +1,3 @@
-
 <?php
 require './Model/article.php';
 
@@ -11,5 +10,14 @@ $articles = getArticlesByPage($pdo, $page, $limit, $search, $category_id);
 $totalArticles = getTotalArticles($pdo, $search, $category_id);
 $totalPages = ceil($totalArticles / $limit);
 
+ob_start();
 require "./View/article.php";
+$content = ob_get_clean();
+
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+    echo json_encode(['content' => $content]);
+    exit;
+}
+
+echo $content;
 ?>

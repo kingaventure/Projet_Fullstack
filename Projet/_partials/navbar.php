@@ -1,16 +1,16 @@
-<?php function getAllCategories(PDO $pdo)
-{
+<?php
+function getAllCategories(PDO $pdo) {
     try {
-        $state = $pdo->prepare("SELECT * FROM category");
-        $state->execute();
-        return $state->fetchAll();
-    } catch (Exception $e) {
-        return "Erreur de requete : {$e->getMessage()}";
+        $statement = $pdo->prepare("SELECT * FROM category");
+        $statement->execute();
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return $e->getMessage();
     }
-} 
+}
+
 $categories = getAllCategories($pdo);
 ?>
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="http://localhost/Projet_fullstack/Projet/index.php?component=article">Le Site de Juju</a>
@@ -27,13 +27,13 @@ $categories = getAllCategories($pdo);
                     
                     <ul class="dropdown-menu">
                         <?php foreach ($categories as $category): ?>
-                        <li><a class="dropdown-item" href="http://localhost/Projet_fullstack/Projet/index.php?category=<?php echo $category['Id']?>&component=article"><?php echo $category['category_name']?></a></li>
+                        <li><a class="dropdown-item" href="index.php?category=<?php echo $category['Id']?>&component=article"><?php echo $category['category_name']?></a></li>
                         <?php endforeach ?>
                     </ul>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="http://localhost/Projet_fullstack/Projet/index.php?component=login">Connexion</a>
+                    <a class="nav-link" href="index.php?component=login">Connexion</a>
                 </li>
                 <button class="btn btn-outline-success" id="cart_btn">
                         <i class="fa-solid fa-cart-shopping mr-3"></i>
@@ -48,4 +48,3 @@ $categories = getAllCategories($pdo);
         </div>
     </div>
 </nav>
-

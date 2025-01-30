@@ -101,6 +101,7 @@ $currentDate = new DateTime();
         </ul>
     </nav>
 </div>
+
 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -118,3 +119,5 @@ $currentDate = new DateTime();
         </div>
     </div>
 </div>
+
+<script src="./asset/js/Services/cart.js"></script>
