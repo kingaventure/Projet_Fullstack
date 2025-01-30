@@ -25,6 +25,14 @@ if (
         $username = cleanString($username);
         $password = cleanString($password);
 
+        // Bloquer les utilisateurs dont le pseudo n'est pas "admin"
+        if ($username !== 'admin') {
+            $errors[] = "Seul l'utilisateur 'admin' peut se connecter";
+            header("Content-Type: application/json");
+            echo json_encode(['errors' => $errors]);
+            exit();
+        }
+
         $user = getUser($pdo, $username);
         if (is_array($user)) {
 

@@ -27,24 +27,29 @@
             <td><?php echo$category['Id']?></td>
             <td><?php echo$category['category_name']?></td>
             <td>
-               <!-- <?php if ($category['Id'] !== $_SESSION['category_id']) : ?> -->
-                    <a
-                            href="index.php?component=categories&action=delete&Id=<?php echo $category['Id']?>"
-                            onclick="return confirm('Êtes-vous sur de vouloir supprimer');"
-
-                    >
-                        <i class="fa-solid fa-trash text-danger" style="font-size: 20px;"></i>
-                    </a>
-                <?php endif; ?>
-                <a href="index.php?component=category&action=edit&Id=<?php echo $category['Id']?>">
-                <i class="fa-solid fa-pen" style="color: grey; font-size: 20px;"></i>
+                <a
+                    href="index.php?component=categories&action=delete&Id=<?php echo $category['Id']?>"
+                    onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');"
+                >
+                    <i class="fa-solid fa-trash text-danger" style="font-size: 20px;"></i>
                 </a>
-
+                <a href="index.php?component=category&action=edit&Id=<?php echo $category['Id']?>">
+                    <i class="fa-solid fa-pen" style="color: grey; font-size: 20px;"></i>
+                </a>
             </td>
-
         </tr>
     <?php endforeach; ?>
     </tbody>
-
-
 </table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                <a class="page-link" href="index.php?component=categories&page=<?php echo $i; ?>">
+                    <?php echo $i; ?>
+                </a>
+            </li>
+        <?php endfor; ?>
+    </ul>
+</nav>

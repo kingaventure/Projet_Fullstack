@@ -1,61 +1,80 @@
 <?php
 require_once 'vendor/autoload.php';
-
-$pdo = new PDO('mysql:host=localhost;dbname=ecommerce_julien', 'root');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../Projet');
+$dotenv->load();
+require 'Projet/includes/database.php';
 $faker = Faker\Factory::create();
 
+// Insert categories
+$categories = ['télevision', 'papetrie', 'Informatique', 'Mobilier', 'avion'];
+foreach ($categories as $category) {
+    $query = $pdo->prepare("INSERT INTO category (category_name) VALUES (:category_name)");
+    $query->execute(['category_name' => $category]);
+}
+
+// Always create an admin user
+$adminPassword = password_hash('admin', PASSWORD_DEFAULT, ['cost' => 10]);
+$query = $pdo->prepare("INSERT INTO user (username, password, email, enabled) VALUES (:username, :password, :email, :enabled)");
+$query->execute([
+    'username' => 'admin',
+    'password' => $adminPassword,
+    'email' => 'admin@example.com',
+    'enabled' => 1,
+]);
+
+// Insert users and articles
 for ($i = 0; $i < 100; $i++) {
     $username = $faker->userName();
     $email = $faker->email();
     $password = $faker->password();
-    $password = password_hash(`$password`, PASSWORD_DEFAULT, ['cost' => 10]);
+    $password = password_hash($password, PASSWORD_DEFAULT, ['cost' => 10]);
     $disabled = $faker->numberBetween(0, 1);
 
     $name = $faker->word();
     $description = $faker->paragraph();
-    $category = $faker->randomElement(['télevision', 'papetrie', 'Informatique', 'Mobilier', 'avion']);
-    $image = $faker->randomElement(["https://cds.thalesgroup.com/sites/default/files/2023-12/csm_16920180628_fuego_thinkstock_489587e013.png", "https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg", 'https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YD04QOJ93VCzWj6J/macro-eye-iris_23-2151618644-AGB4DQ180oswOLj4.jpg', 'https://emotions-numeriques.com/wp-content/uploads/2018/10/fleur-2.jpg', 'https://st.depositphotos.com/1057668/4156/i/450/depositphotos_41568091-stock-photo-seljalandfoss-waterfall.jpg']); ;
+    $category = mt_rand(1, 5); // Random number between 1 and 5
+    $image = "6799fcaa9eb6d.jpg";
     $prix = $faker->randomNumber();
     $stock = $faker->randomNumber();
 
-
-    $query = $pdo->prepare("INSERT INTO user (username, password, email, enabled) VALUES (:Username, :Password, :Email, :Disabled)");
+    $query = $pdo->prepare("INSERT INTO user (username, password, email, enabled) VALUES (:username, :password, :email, :enabled)");
     $query->execute([
-        'Username' => $username,
-        'Email' => $email,
-        'Password' => $password,
-        'Disabled' => $disabled,
+        'username' => $username,
+        'email' => $email,
+        'password' => $password,
+        'enabled' => $disabled,
     ]);
 
-    $query = $pdo->prepare("INSERT INTO article (Name, Description, Category, Image, Prix, Stock) VALUES (:Name, :Description, :Category, :Image, :Prix, :Stock)");
+    $query = $pdo->prepare("INSERT INTO article (name, description, category_id, image, prix, stock) VALUES (:name, :description, :category_id, :image, :prix, :stock)");
     $query->execute([
-        'Name' => $name,
-        'Description' => $description,
-        'Category' => $category,
-        'Image' => $image,
-        'Prix' => $prix,
-        'Stock' => $stock,
+        'name' => $name,
+        'description' => $description,
+        'category_id' => $category,
+        'image' => $image,
+        'prix' => $prix,
+        'stock' => $stock,
     ]);
-
-
 }
 
-for ($i = 0; $i < 5; $i++) {
-    $query = $pdo->prepare("INSERT INTO category (Name) VALUES (:Name)");
-        if($i === 0){
-            $value = "télevision";
-        } else if ($i === 1){
-            $value = "papetrie";
-        } else if ($i === 2){
-            $value = "Informatique";
-        } else if ($i === 3){
-            $value = "Mobilier";
-        } else if ($i === 4){
-            $value = "avion";
-        }
+// Insert promotions
+for ($i = 0; $i < 50; $i++) {
+    $article_id = mt_rand(1, 100);
+    $reduction = mt_rand(2, 70);
 
-        $query->execute([
-            'Name' => $value,
-        ]);
-    }
+    // Current date/time as start date
+    $start_date = date("Y-m-d\TH:i");
+
+    // Faker: any time from now to +1 year
+    $end_date = $faker
+        ->dateTimeBetween('now', '+1 year')
+        ->format("Y-m-d\TH:i");
+
+    $query = $pdo->prepare("INSERT INTO promotion (article_id, reduction, start, end) VALUES (:article_id, :reduction, :start, :end)");
+    $query->execute([
+        'article_id' => $article_id,
+        'reduction' => $reduction,
+        'start' => $start_date,
+        'end' => $end_date,
+    ]);
+}
 ?>

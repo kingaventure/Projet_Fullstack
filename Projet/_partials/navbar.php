@@ -49,4 +49,3 @@ $categories = getAllCategories($pdo);
     </div>
 </nav>
 
-<script src="./asset/js/Services/cart.js"></script>

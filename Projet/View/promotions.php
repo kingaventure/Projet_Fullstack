@@ -25,19 +25,19 @@
     </thead>
     <tbody>
 
-    <?php foreach($offres as $offre) :?>
+    <?php foreach($promotions as $promotion) :?>
         <tr class="table align-middle">
-            <td><?php echo $offre['id']?></td>
-            <td><?php echo $offre['article_name']?></td>
-            <td><?php echo $offre['reduction']?></td>
-            <td><?php echo $offre['start']?></td>
-            <td><?php echo $offre['end']?></td>
+            <td><?php echo $promotion['id']?></td>
+            <td><?php echo $promotion['article_name']?></td>
+            <td><?php echo $promotion['reduction']?></td>
+            <td><?php echo $promotion['start']?></td>
+            <td><?php echo $promotion['end']?></td>
             <td>
-                <a href="index.php?component=promotions&action=delete&id=<?php echo $offre['id']?>"
-                   onclick="return confirm('Êtes-vous sur de vouloir supprimer');">
+                <a href="index.php?component=promotions&action=delete&id=<?php echo $promotion['id']?>"
+                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette promotion ?');">
                     <i class="fa-solid fa-trash text-danger" style="font-size: 20px;"></i>
                 </a>
-                <a href="index.php?component=promotion&action=edit&id=<?php echo $offre['id']?>">
+                <a href="index.php?component=promotion&action=edit&id=<?php echo $promotion['id']?>">
                     <i class="fa-solid fa-user-pen" style="color: grey; font-size: 20px;"></i>
                 </a>
             </td>
@@ -45,3 +45,15 @@
     <?php endforeach; ?>
     </tbody>
 </table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                <a class="page-link" href="index.php?component=promotions&page=<?php echo $i; ?>">
+                    <?php echo $i; ?>
+                </a>
+            </li>
+        <?php endfor; ?>
+    </ul>
+</nav>

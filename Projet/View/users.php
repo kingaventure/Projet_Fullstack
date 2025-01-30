@@ -30,7 +30,6 @@
             <td><?php echo$user['username']?></td>
             <td><?php echo$user['email']?></td>
             <td>
-                <!-- <?php if ($user['id'] !== $_SESSION['id']) :?> -->
                 <a href="index.php?component=users&action=toggle-enabled&id=<?php echo $user['id']?>">
                     <i
                             class="fa-solid
@@ -42,41 +41,31 @@
                     >
                     </i>
                 </a>
-                <?php else : ?>
-
-                    <i
-                            class="fa-solid
-                            <?php
-                            echo $user['enabled'] ?
-                                "fa-user-check text-success" :
-                                "fa-user-lock text-danger"
-                            ?>"
-                            title="Vous ne pouvez pas désactiver le compte que vous utilisez"
-                            style="font-size: 20px;"
-                    >
-                    </i>
-
-                <?php endif; ?>
             </td>
             <td>
-               <!-- <?php if ($user['id'] !== $_SESSION['user_id']) : ?> -->
-                    <a
-                            href="index.php?component=users&action=delete&id=<?php echo $user['id']?>"
-                            onclick="return confirm('Êtes-vous sur de vouloir supprimer');"
-
-                    >
-                        <i class="fa-solid fa-trash text-danger" style="font-size: 20px;"></i>
-                    </a>
-                <?php endif; ?>
+                <a
+                        href="index.php?component=users&action=delete&id=<?php echo $user['id']?>"
+                        onclick="return confirm('Êtes-vous sur de vouloir supprimer');"
+                >
+                    <i class="fa-solid fa-trash text-danger" style="font-size: 20px;"></i>
+                </a>
                 <a href="index.php?component=user&action=edit&id=<?php echo $user['id']?>">
                     <i class="fa-solid fa-user-pen" style="color: grey; font-size: 20px;"></i>
                 </a>
-
             </td>
-
         </tr>
     <?php endforeach; ?>
     </tbody>
-
-
 </table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+            <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                <a class="page-link" href="index.php?component=users&page=<?php echo $i; ?>">
+                    <?php echo $i; ?>
+                </a>
+            </li>
+        <?php endfor; ?>
+    </ul>
+</nav>

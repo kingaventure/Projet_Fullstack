@@ -2,44 +2,41 @@
 
 require "./Model/items.php";
 
-    if (
-        isset($_GET['action']) &&
-        isset($_GET['Id']) &&
-        is_numeric($_GET['Id'])
-        ) {
-        $id = cleanString($_GET['Id']);
-        switch ($_GET['action']) {
-            case 'delete':
-                $delete = delete($pdo, $id);
-                if (!empty($delete))
-                {
-                    $delete = "Impossible de supprimer l'utilisateur car celui-ci est encore lié !";
-                    $errors[] = $delete;
-                } else {
-                    header("Location: index.php?component=items");
-                }
+if (
+    isset($_GET['action']) &&
+    isset($_GET['Id']) &&
+    is_numeric($_GET['Id'])
+) {
+    $id = cleanString($_GET['Id']);
+    switch ($_GET['action']) {
+        case 'delete':
+            $delete = delete($pdo, $id);
+            if (!empty($delete))
+            {
+                $delete = "Impossible de supprimer l'utilisateur car celui-ci est encore lié !";
+                $errors[] = $delete;
+            } else {
+                header("Location: index.php?component=items");
+            }
 
-                break;
-            default:
-                break;
-        }
-
-
+            break;
+        default:
+            break;
     }
+}
 
-    $search = isset($_POST['search']) ? $_POST['search'] : null;
-    $sortby = isset($_GET['sortby']) ? $_GET['sortby'] : null;
-    $items = getAll($pdo, $search, $sortby);
-    foreach($items as $item){
-        $category = getArticleCategoryNames($pdo, $item['category_id']);
-        $item['category_id'] = $category['category_name'];
-    }
-    
+$search = isset($_POST['search']) ? $_POST['search'] : null;
+$sortby = isset($_GET['sortby']) ? $_GET['sortby'] : null;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = 15;
+$offset = ($page - 1) * $limit;
 
-    if (!is_array($items))
-    {
-        $errors[] = $items;
-    }
+$items = getAll($pdo, $search, $sortby, $limit, $offset);
+$totalItems = getItemCount($pdo, $search);
+$totalPages = ceil($totalItems / $limit);
 
+if (!is_array($items)) {
+    $errors[] = $items;
+}
 
 require "./View/items.php";

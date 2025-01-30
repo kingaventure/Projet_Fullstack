@@ -10,7 +10,7 @@ function getArticlesByPage(PDO $pdo, $page, $limit, $search = '', $category_id =
         $query .= ' AND article.category_id = :category_id';
     }
 
-    $query .= ' LIMIT :limit OFFSET :offset';
+    $query .= ' ORDER BY article.Id LIMIT :limit OFFSET :offset';
     
     $statement = $pdo->prepare($query);
     $searchTerm = '%' . $search . '%';
@@ -65,7 +65,9 @@ function getArticleCategoryNames(PDO $pdo, int $category_id) {
 
 function getAllPromotions(PDO $pdo) {
     try {
-        $statement = $pdo->prepare("SELECT * FROM promotion");
+        $currentDate = new DateTime();
+        $statement = $pdo->prepare("SELECT * FROM promotion WHERE end > :currentDate ORDER BY end DESC");
+        $statement->bindValue(':currentDate', $currentDate->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         $statement->execute();
         return $statement->fetchAll();
     }

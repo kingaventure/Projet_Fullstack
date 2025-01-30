@@ -1,27 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const buyButtons = document.querySelectorAll('.buyBtn');
-    const toastMessage = document.getElementById('toast-message');
-    const toast = new bootstrap.Toast(toastMessage);
-    const modal = new bootstrap.Modal(document.getElementById('modal'));
-    const modalBody = document.querySelector('#modal .modal-body');
-    const modalTitle = document.querySelector('#modal .modal-title');
+    const cart = [];
     const cartButton = document.getElementById('cart_btn');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
-    const modalValidBtn = document.getElementById('modal-valid-btn');
-
-    let cartItems = [];
+    const buyButtons = document.querySelectorAll('.buyBtn');
+    const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+    const cartModalBody = document.getElementById('cartModalBody');
 
     buyButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const articleName = button.getAttribute('data-article-name');
-            const articlePrice = button.getAttribute('data-article-price');
-            const articleStock = button.getAttribute('data-article-stock');
-            const articleOriginalPrice = button.getAttribute('data-article-original-price');
-            const articleDiscount = button.getAttribute('data-article-discount');
+        button.addEventListener('click', (event) => {
+            const articleName = event.target.getAttribute('data-article-name');
+            const articlePrice = event.target.getAttribute('data-article-price');
+            const articleStock = event.target.getAttribute('data-article-stock');
+            const articleOriginalPrice = event.target.getAttribute('data-article-original-price');
+            const articleDiscount = event.target.getAttribute('data-article-discount');
 
-            toast.show();
-
-            const articleElement = {
+            const article = {
                 name: articleName,
                 price: articlePrice,
                 stock: articleStock,
@@ -29,42 +21,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 discount: articleDiscount
             };
 
-            cartItems.push(articleElement);
+            cart.push(article);
+            updateCartDisplay();
         });
     });
 
     cartButton.addEventListener('click', () => {
-        modalBody.innerHTML = '';
-        modalTitle.textContent = 'Panier';
+        cartModalBody.innerHTML = ''; // Clear previous content
 
-        cartItems.forEach((item, index) => {
+        cart.forEach((article, index) => {
             const articleElement = document.createElement('div');
+            articleElement.classList.add('cart-item');
             articleElement.innerHTML = `
-                <p>Nom: ${item.name}</p>
-                ${item.discount > 0 ? `<p>Prix: <span style="text-decoration: line-through;">${item.originalPrice}$</span> ${item.price}$ (-${item.discount}%)</p>` : `<p>Prix: ${item.price}$</p>`}
-                <p>Stock restant: ${item.stock}</p>
-                <button class="btn btn-danger remove-btn" data-index="${index}">Retirer</button>
+                <p>Name: ${article.name}</p>
+                <p>Price: ${article.price}$</p>
+                <p>Stock: ${article.stock}</p>
+                <p>Original Price: ${article.originalPrice}$</p>
+                <p>Discount: ${article.discount}%</p>
+                <button class="removeBtn btn btn-danger" data-index="${index}">Remove</button>
             `;
-            modalBody.appendChild(articleElement);
+            cartModalBody.appendChild(articleElement);
         });
 
-        modal.show();
-
-        const removeButtons = document.querySelectorAll('.remove-btn');
+        const removeButtons = document.querySelectorAll('.removeBtn');
         removeButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const index = e.target.getAttribute('data-index');
-                cartItems.splice(index, 1);
-                e.target.parentElement.remove();
+            button.addEventListener('click', (event) => {
+                const index = event.target.getAttribute('data-index');
+                cart.splice(index, 1);
+                updateCartDisplay();
+                cartButton.click(); // Refresh modal content
             });
         });
+
+        cartModal.show();
     });
 
-    modalCloseBtn.addEventListener('click', () => {
-        modal.hide();
-    });
-
-    modalValidBtn.addEventListener('click', () => {
-        modal.hide();
-    });
+    function updateCartDisplay() {
+        const cartCount = cart.length;
+        cartButton.innerHTML = `<i class="fa-solid fa-cart-shopping mr-3"></i> (${cartCount})`;
+    }
 });
