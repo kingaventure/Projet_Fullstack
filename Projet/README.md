@@ -1,40 +1,53 @@
-Projet de Julien Groult (eCommerce)
+# Projet de Julien Groult (eCommerce)
 
-Comment faire pour initier le projet ? 
+## Comment initier le projet ?
 
-Avant de commencer
+### Avant de commencer
 
-La root du Projet est l'endroit ou ce trouve les dossier Bdd, Documentation, Projet et une fois installé, vendor, c'est ici que vous ferez toute les lignes de commandes
+La racine du projet est l'endroit où se trouvent les dossiers `Bdd`, `Documentation`, `Projet` et, une fois installé, `vendor`. C'est ici que vous exécuterez toutes les lignes de commande.
 
-Etape 1 :
+### Étapes d'installation
 
-Clone le repo dans htdocs et allumé sur Xampp Mysql et Apache
+#### Étape 1 :
 
-Etape 2 : 
+Clonez le dépôt dans `htdocs` et démarrez MySQL et Apache sur XAMPP.
 
-Crée un dossier uploads dans le dossier Projet puis mettez la photo qui ce trouve dans Bdd dans uploads
+#### Étape 2 :
 
-Etape 3 : 
+Créez un dossier `uploads` dans le dossier `Projet`, puis mettez la photo qui se trouve dans `Bdd` dans `uploads`.
 
-dans le fichier .env.dist mettez votre mot de passe et votre username à la base de donnée en fonction de ce que vous avez fait vous même, puis renommer le fichier en .env  
+#### Étape 3 :
 
-Etape 4 : 
+Dans le fichier `.env.dist`, mettez votre mot de passe et votre nom d'utilisateur pour la base de données en fonction de ce que vous avez configuré, puis renommez le fichier en `.env`.
 
-Crée une base de donnée nommé "ecommerce_julien"
+#### Étape 4 :
 
-Etape 5 : 
+Créez une base de données nommée `ecommerce_julien`.
 
-Importé le base de donnée.sql qui est dans Bdd
+#### Étape 5 :
 
-Etape 6 :
+Importez le fichier `base_de_donnee.sql` qui se trouve dans `Bdd`.
 
-Initialisé faker php avec cet ligne de commande dans le projet : composer require fakerphp/faker
-(il faut comperser déja installé)
+#### Étape 6 :
 
-Etape 7 :
+Initialisez Faker PHP avec cette ligne de commande dans le projet : 
 
-Rentrer cet ligne : php Bdd/generate_data.php
+composer require fakerphp/faker
 
-Etape 8 : 
+#### Étape 7 :
 
-aller sur votre navigateur et rentrer l'Url : http://localhost/Projet_fullstack/Projet/index.php?component=article
+Exécutez cette ligne de commande :
+
+php Bdd/generate_data.php
+
+#### Étape 8 :
+
+Allez sur votre navigateur et entrez l'URL :
+
+http://localhost/Projet_fullstack/Projet/index.php?component=article
+
+#### Étape 9 :
+
+Pour passer l'écran de login, le nom d'utilisateur et le mot de passe sont : admin.
+
+
