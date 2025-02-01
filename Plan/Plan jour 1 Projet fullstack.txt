@@ -1,4 +1,0 @@
-Crée le MCD 
-Découpage projet
-Repo git
-Crée la structure projet 
